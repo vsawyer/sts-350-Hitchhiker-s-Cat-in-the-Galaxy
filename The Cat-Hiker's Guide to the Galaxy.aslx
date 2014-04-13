@@ -1,0 +1,2181 @@
+<!--Saved by Quest 5.5.5173.27901-->
+<asl version="550">
+  <include ref="English.aslx" />
+  <include ref="Core.aslx" />
+  <game name="The Hitch-hiker's Cat In The Galaxy">
+    <gameid>a2044bee-0923-4a25-bdc3-63f867148b00</gameid>
+    <version>1.0</version>
+    <firstpublished>2014</firstpublished>
+    <povstatusattributes type="stringdictionary" />
+    <statusattributes type="stringdictionary" />
+    <description type="string"></description>
+    <autodescription />
+    <autodisplayverbs />
+    <pov type="object">Ford the cat</pov>
+  </game>
+  <object name="bedroom">
+    <inherit name="editor_room" />
+    <dark type="boolean">false</dark>
+    <description type="script">
+      msg ("")
+    </description>
+    <beforefirstenter type="script"><![CDATA[
+      msg ("The room is dark. However, thanks to your incredibly keen senses, you can see everything. The snoring human on the bed, who you like to fondly refer to as your slave, refuses to get up and let you out of this cluttered room. If you haven't already realised from your long tail and sharp claws, you're a cat. But you wouldn't really want to be anything else, would you?<br/>")
+    ]]></beforefirstenter>
+    <object name="Ford the cat">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+      <inherit name="male" />
+      <turns type="int">5</turns>
+      <statusattributes type="stringdictionary">
+        <item>
+          <key>Lives</key>
+          <value></value>
+        </item>
+      </statusattributes>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Speak to</value>
+      </displayverbs>
+      <inventoryverbs type="stringlist">
+        <value>Look at</value>
+        <value>Use</value>
+        <value>Drop</value>
+        <value>Investigate</value>
+      </inventoryverbs>
+      <Lives type="int">9</Lives>
+      <pickupobject type="script">
+        MeetingDog
+      </pickupobject>
+      <changedstatusattributes type="script">
+      </changedstatusattributes>
+    </object>
+    <object name="flathead screwdriver">
+      <inherit name="editor_object" />
+      <scenery />
+    </object>
+    <object name="washbasin">
+      <inherit name="editor_object" />
+      <scenery />
+    </object>
+    <object name="dressing gown">
+      <inherit name="editor_object" />
+      <scenery />
+    </object>
+    <object name="chair">
+      <inherit name="editor_object" />
+      <scenery />
+    </object>
+    <object name="window">
+      <inherit name="editor_object" />
+      <look type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          if (GetBoolean(curtains, "alreadyOpened")) {
+            msg ("The curtains rip!")
+          }
+          else {
+            msg ("You and the curtains fall down off the window. Sunlight shines into the room. You hear an angry groan. You look to your slave and notice he is now sitting up, rubbing his eyes.  He does not look well.  Suddenly he puts on a dressing gown and reaches into its pocket to take out a pill which he eats.  Then he takes his toothbrush, the screwdriver, and leaves the room, leaving the door slightly ajar.")
+            SetObjectFlagOn (curtains, "alreadyOpened")
+          }
+        }
+      </look>
+    </object>
+    <object name="toothbrush">
+      <inherit name="editor_object" />
+      <lick type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          msg ("You lick your slave's toothbrush. Tastes minty. I'm sure he appreciates you adding your cat saliva on there. All humans like that, right?")
+        }
+      </lick>
+    </object>
+    <object name="your slave">
+      <inherit name="editor_object" />
+      <inherit name="male" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <alt type="stringlist">
+        <value>man</value>
+        <value>person</value>
+      </alt>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Speak to</value>
+      </displayverbs>
+      <jump type="script">
+        if (Got(catnip)) {
+        }
+        else if (GetBoolean(curtains, "alreadyOpened")) {
+          msg ("He left!")
+        }
+        else {
+          msg ("Your slave groans and rolls over, but refuses to get up.")
+        }
+      </jump>
+      <look type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          if (GetBoolean(curtains, "alreadyOpened")) {
+            msg ("He's not here, he left.")
+          }
+          else if (not GetBoolean(curtains, "alreadyOpened")) {
+            msg ("There is a man asleep on a bed. You know this man as your slave. He feeds you and attends to your scratching needs. ")
+          }
+        }
+      </look>
+      <claw type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          if (GetBoolean(curtains, "alreadyOpened")) {
+            msg ("Your slave left!")
+          }
+          else if (not GetBoolean(curtains, "alreadyOpened")) {
+            msg ("His arm reaches out to swat you before going back to sleep.  Clearly it would be unwise to do something like that again.")
+          }
+        }
+      </claw>
+      <scratch type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          if (GetBoolean(curtains, "alreadyOpened")) {
+            msg ("Your slave left!")
+          }
+          else if (not GetBoolean(curtains, "alreadyOpened")) {
+            firsttime {
+              msg ("His arm reaches out to swat you before going back to sleep.  Clearly it would be unwise to do something like that again.")
+            }
+            otherwise {
+              msg ("You're wiser than this!")
+            }
+          }
+        }
+      </scratch>
+    </object>
+    <object name="catnip">
+      <inherit name="editor_object" />
+      <take />
+      <takemsg>Catnip taken.</takemsg>
+      <dropmsg>.</dropmsg>
+      <alias>bag of catnip</alias>
+      <ontake type="script"><![CDATA[
+        msg ("You are now feeling woozy.")
+        SetObjectFlagOn (catnip, "taken")
+        hasCatnip = 1
+        get input {
+          msg ("<br/>You are still  feeling woozy. Maybe you should of stayed away from that.")
+        }
+        SetTurnTimeout (2) {
+          msg ("You may pass out.")
+        }
+        SetTurnTimeout (3) {
+          msg ("The catnip is starting to wear off. ")
+        }
+        SetTurnTimeout (4) {
+          msg ("Finally. You can think again.")
+          hasCatnip = 0
+          RemoveObject (catnip)
+        }
+      ]]></ontake>
+      <ondrop type="script">
+        SetObjectFlagOn (catnip, "dropped")
+        Ford the cat.turns = 5
+      </ondrop>
+    </object>
+    <object name="curtains">
+      <inherit name="editor_object" />
+      <inherit name="container_closed" />
+      <close type="boolean">false</close>
+      <isopen type="boolean">false</isopen>
+      <hidechildren type="boolean">false</hidechildren>
+      <look type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          if (GetBoolean(curtains, "alreadyOpened")) {
+            msg ("The curtains lay on the ground in a heap below the window.")
+          }
+          else {
+            msg ("Curtains are closed, blocking the sunlight")
+          }
+        }
+      </look>
+      <claw type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          if (GetBoolean(curtains, "alreadyOpened")) {
+            msg ("The curtains rip! Maybe you should stop shredding the curtains. ")
+          }
+          else {
+            msg ("The curtains fall to the ground letting a bright ray of sunshine into the room. You hear an angry groan. You look to your slave and notice he is now sitting up, rubbing his eyes.  He does not look well.  Suddenly he puts on a dressing gown and reaches into its pocket to take out a pill which he eats.  Then he takes his toothbrush, the screwdriver, and leaves the room, leaving the door slightly ajar.")
+            SetObjectFlagOn (curtains, "alreadyOpened")
+            UnlockExit (front porch exit)
+          }
+        }
+      </claw>
+      <scratch type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          if (GetBoolean(curtains, "alreadyOpened")) {
+            msg ("The curtains rip! Maybe you should stop shredding the curtains. ")
+          }
+          else {
+            msg ("The curtains fall to the ground letting a bright ray of sunshine into the room. You hear an angry groan. You look to your slave and notice he is now sitting up, rubbing his eyes.  He does not look well.  Suddenly he puts on a dressing gown and reaches into its pocket to take out a pill which he eats.  Then he takes his toothbrush, the screwdriver, and leaves the room, leaving the door slightly ajar.")
+            SetObjectFlagOn (curtains, "alreadyOpened")
+            UnlockExit (front porch exit)
+          }
+        }
+      </scratch>
+      <onopen type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          if (GetBoolean(curtains, "alreadyOpened")) {
+            msg ("The curtains rip!")
+          }
+          else {
+            msg ("You and the curtains fall down off the window. Sunlight shines into the room. You hear an angry groan. ")
+            SetObjectFlagOn (curtains, "alreadyOpened")
+            UnlockExit (front porch exit)
+          }
+        }
+      </onopen>
+    </object>
+    <object name="lightswitch">
+      <inherit name="editor_object" />
+      <turnon type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          msg ("You can't reach the lights. You're only a like a foot tall you know.")
+        }
+      </turnon>
+    </object>
+    <exit name="front porch exit" alias="south" to="front porch">
+      <inherit name="southdirection" />
+      <locked />
+      <runscript type="boolean">false</runscript>
+    </exit>
+    <object name="door">
+      <inherit name="editor_object" />
+      <inherit name="openable" />
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>unlock</value>
+      </displayverbs>
+      <inventoryverbs type="stringlist">
+        <value>Look at</value>
+      </inventoryverbs>
+      <close />
+      <isopen type="boolean">false</isopen>
+      <openscript type="script">
+        if (Got(catnip)) {
+        }
+        else {
+          msg ("You have paws. You cannot turn the doorknob. Maybe you should find someone who can.")
+        }
+      </openscript>
+      <closescript type="script">
+      </closescript>
+    </object>
+    <turnscript name="Catnip Turn Script">
+      <enabled type="boolean">false</enabled>
+      <script>
+        if (Got(catnip)) {
+          Ford the cat.turns = Ford the cat.turns - 1
+          msg ("You feel woozy. That catnip seems to have been a little strong. ")
+          if (GetBoolean(catnip, "dropped")) {
+            Ford the cat.turns = 5
+            msg ("The catnip has worn off. ")
+          }
+          if (Ford the cat.turns = 0) {
+            msg ("The catnip has worn off")
+            Ford the cat.turns = 5
+          }
+        }
+        RemoveObject (catnip)
+      </script>
+    </turnscript>
+    <turnscript />
+    <command>
+      <pattern type="simplepattern"></pattern>
+      <script>
+      </script>
+    </command>
+    <command>
+      <pattern>die</pattern>
+      <script>
+        Death
+      </script>
+    </command>
+  </object>
+  <verb>
+    <property>claw</property>
+    <pattern>claw</pattern>
+    <defaultexpression>"You can't claw " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>scratch</property>
+    <pattern>scratch</pattern>
+    <defaultexpression>"There's no use in scratching that."</defaultexpression>
+  </verb>
+  <verb>
+    <property>jump</property>
+    <pattern>jump</pattern>
+    <defaultexpression>"You can't jump " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="front porch">
+    <inherit name="editor_room" />
+    <descprefix>You are on </descprefix>
+    <description type="string"></description>
+    <enter type="script"><![CDATA[
+      msg ("This is the enclosed front porch of your home. You can re-enter your home to the north.<br/>")
+    ]]></enter>
+    <exit alias="north" to="bedroom">
+      <inherit name="northdirection" />
+    </exit>
+    <exit alias="south" to="Front of the House">
+      <inherit name="southdirection" />
+    </exit>
+  </object>
+  <object name="Front of the House">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>the</prefix>
+    <description type="string"></description>
+    <onexit type="script">
+      msg ("")
+    </onexit>
+    <enter type="script">
+    </enter>
+    <beforeenter type="script"><![CDATA[
+      msg ("You see a man in  yellow hard hat lying on the ground in front of a huge, metal animal. People do the strangest, inexplicable things.<br/><br/> You see something glinting east of you.<br/><br/>To the east is the country lane. ")
+    ]]></beforeenter>
+    <exit alias="east" to="Country Lane">
+      <inherit name="eastdirection" />
+    </exit>
+  </object>
+  <object name="Country Lane">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>the</prefix>
+    <objectslistprefix>You meet up with that annoying neighbourhood canine,  </objectslistprefix>
+    <displayverbs type="stringlist">
+      <value>Look at</value>
+      <value>Take</value>
+      <value>look up</value>
+    </displayverbs>
+    <description type="script">
+      firsttime {
+        msg ("He has something shiny in his mouth.")
+      }
+    </description>
+    <enter type="script"><![CDATA[
+      msg ("<br/>There is a quaint pub on the side of the road. <br/>Too bad the dumb humans won't let you in due to the fact that you are a cat. If only they knew how much cleaner you were in comparison.")
+    ]]></enter>
+    <onexit type="script">
+    </onexit>
+    <beforefirstenter type="script">
+    </beforefirstenter>
+    <exit alias="west" to="Front of the House">
+      <inherit name="westdirection" />
+    </exit>
+    <object name="Dog">
+      <inherit name="editor_object" />
+      <inherit name="namedmale" />
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <look>Dog sits patiently outside the pub awaiting his owner. You never could understand why he bestowed his loyalty unto human kind. Never seemed worth it to you. Although your slave did provide you with food. That was his one redeeming quality.</look>
+      <inventoryverbs type="stringlist">
+        <value>Look at</value>
+      </inventoryverbs>
+      <drop type="boolean">false</drop>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Speak to</value>
+      </displayverbs>
+      <askdefault type="script">
+      </askdefault>
+      <speak type="script">
+        MeetingDog
+      </speak>
+      <claw type="script">
+        firsttime {
+          SetObjectFlagOn (Dog, "isClawed")
+          msg ("The dog jumps back with a cry and drops what he was holding.")
+        }
+        otherwise {
+          msg ("Hey watch it!")
+        }
+      </claw>
+      <bite type="script">
+        SetObjectFlagOn (Dog, "isClawed")
+        msg ("The dog jumps back with a cry and drops what he was holding.")
+      </bite>
+      <scratch type="script">
+        SetObjectFlagOn (Dog, "isClawed")
+        msg ("The dog jumps back with a cry and drops what he was holding.")
+      </scratch>
+      <give type="scriptdictionary">
+        <item key="Cheese Sandwich"><![CDATA[
+          SetObjectFlagOff (Dog, "hungry")
+          msg ("Thank you. That was the most delicious thing I have been fortunate enough to devour during my time on this planet. Here is that device thingy that you wanted. <br/>")
+          RemoveObject (Cheese Sandwich)
+          SetObjectFlagOn (Dog, "done")
+          MoveObject (Device, Ford the cat)
+          if (Got(Device)) {
+            msg ("There is a rumbling from above. What started as a faint humming grows defeaning, as a shadow is cast over town.")
+          }
+        ]]></item>
+      </give>
+      <ask type="scriptdictionary" />
+    </object>
+    <object name="Pub Entrance">
+      <scenery />
+      <enter>You claw at the door, but it is thrown shut in your face. If you want to get into the pub, you'll have to find another way.</enter>
+      <exit>
+        <locked />
+        <lockmessage>You claw at the door, but it is thrown shut in your face. If you want to get into the pub, you'll have to find another way.</lockmessage>
+      </exit>
+      <object name="Device">
+        <inherit name="editor_object" />
+        <visible />
+        <take />
+        <look>The shiny object turns out to be a device of a peculiar design with glowing lights on it. It radiates warm energy.</look>
+        <displayverbs type="stringlist">
+          <value>Look at</value>
+          <value>Take</value>
+          <value>Invesigate</value>
+        </displayverbs>
+        <use type="script">
+          msg ("You do not have opposable thumbs.")
+        </use>
+      </object>
+    </object>
+    <exit name="Entrance to Pub" alias="in" to="Pub">
+      <inherit name="indirection" />
+      <lockmessage>You claw at the door, but it is thrown shut in your face. If you want to get into the pub, you'll have to find another way.</lockmessage>
+      <locked />
+      <visible />
+      <scenery />
+    </exit>
+    <exit alias="north" to="Back of Pub">
+      <inherit name="northdirection" />
+      <scenery />
+    </exit>
+    <exit alias="up" to="Country Lane">
+      <inherit name="updirection" />
+      <lookonly />
+      <look type="script">
+        firsttime {
+          msg ("A huge spaceship (Vogon Fleet) hurtles through the sky. The utter assault of your senses brings you to the edge of consciousness. Your slave exits the pub and stands uselessly a few feet away, dumbfounded by the spaceship.")
+          SetObjectFlagOn (Country Lane, "VogonsHere")
+        }
+        otherwise {
+          msg ("You've already saw what you needed to see.")
+        }
+      </look>
+    </exit>
+    <exit>
+      <scenery />
+    </exit>
+    <object name="your slave1">
+      <inherit name="editor_object" />
+      <alias>your slave</alias>
+      <scenery />
+      <attr name="go to" type="script"><![CDATA[
+        msg ("An alien noise resonates from within the spaceship. Your slave beckons you into his arms. After a quick glance upwards, you jump into his embrace. Noticing the device in your mouth, he takes it from you. After quickly examining it, he pushes the green button on the side of the ring labelled \"hitchhike\"<br/><br/>Lights swirl sickeningly around your head as your try to cling on to your slave.. The ground dissapates from beneath your paws as your feel every single strand of fur on your body being scrambled. This is too much to ask for from a housecat")
+        MoveObject (Ford the cat, Darkness)
+      ]]></attr>
+    </object>
+    <object name="object">
+      <inherit name="editor_object" />
+      <visible />
+      <scenery />
+      <take type="script">
+        MeetingDog
+      </take>
+    </object>
+    <command>
+      <pattern>pick it up</pattern>
+      <script>
+        MeetingDog
+      </script>
+    </command>
+    <command>
+      <pattern>wait</pattern>
+      <script>
+        if (GetBoolean(Country Lane, "VogonsHere")) {
+          msg ("In your hesitation, the Vogons swoop down and send a projectile right where you were standing.")
+          Death
+          msg ("Lucky for you, you're a cat! You still have some lives left.")
+        }
+        else {
+          msg ("Time passes.")
+        }
+      </script>
+    </command>
+  </object>
+  <verb>
+    <property>enter</property>
+    <pattern>enter</pattern>
+    <defaultexpression>"You can't enter " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="Pub">
+    <inherit name="editor_object" />
+  </object>
+  <object name="Pub Kitchen">
+    <inherit name="editor_room" />
+    <description><![CDATA[Grubby counters and cabinets. Not too impressive. Must be quite the fine establishment.<br/>]]></description>
+    <object name="Cheese Sandwich">
+      <inherit name="editor_object" />
+      <take />
+      <takemsg>You take the sandwich in your mouth. Yuck. You really hope that device is worth all this effort.</takemsg>
+      <look>A stale cheese sandwich sits on a plate on one of the counters. Doesn't look like all that appetizing in your honest opinion.</look>
+      <feature_usegive />
+      <eat type="script"><![CDATA[
+        msg ("Why would even think to eat something a dog would eat? The sandwich goes down grudgingly. Within moments, you grow incredibly ill, collasping on the spot.<br/>")
+        Death
+        msg ("Thank goodness you're a cat! You still have some lives left. We' ll pretend you never tried to eat that disgusting sandwich.")
+      ]]></eat>
+      <pickupobject type="script">
+        msg ("You take the sandwich in your mouth. Yuck. You really hope that device is worth all this effort.")
+        AddToInventory (Cheese Sandwich)
+      </pickupobject>
+      <givetoanything type="script">
+        DogisHungry
+        RemoveObject (Cheese Sandwich)
+      </givetoanything>
+      <ontake type="script">
+        AddToInventory (Cheese Sandwich)
+      </ontake>
+      <giveto type="scriptdictionary" />
+      <givesingle type="boolean">false</givesingle>
+    </object>
+    <exit alias="out" to="Back of Pub">
+      <inherit name="outdirection" />
+    </exit>
+  </object>
+  <object name="Back of Pub">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>the</prefix>
+    <description>You see overflowing trash bins. They smell delicious, but more importantly, there is a door to get into the back of the pub.</description>
+    <exit alias="south" to="Country Lane">
+      <inherit name="southdirection" />
+    </exit>
+    <exit alias="in" to="Pub Kitchen">
+      <inherit name="indirection" />
+    </exit>
+  </object>
+  <verb>
+    <property>investigateobject</property>
+    <pattern>investigate object</pattern>
+    <defaultexpression>"You can't investigate object " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <pattern>go to</pattern>
+    <property>go to</property>
+    <defaultexpression>"You can't go to " + object.article + "."</defaultexpression>
+  </verb>
+  <command name="smell1">
+    <pattern type="string">smell</pattern>
+    <script>
+      if (not GetBoolean(Ford the cat, "inHideout")) {
+        msg ("No time to smell! Not even for roses")
+      }
+      else {
+        msg ("Something smells pungent.")
+        SetObjectFlagOff (Ford the cat, "inHideout")
+        MoveObject (Ford the cat, Hideout)
+      }
+    </script>
+  </command>
+  <verb>
+    <property>bite</property>
+    <pattern>bite</pattern>
+    <defaultexpression>"You can't bite " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="Darkness">
+    <inherit name="editor_room" />
+    <alias>Darkness</alias>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <enter type="script">
+    </enter>
+    <beforeenter type="script">
+    </beforeenter>
+    <turnscript name="DarkTurnScript">
+      <enabled />
+      <script>
+        msg ("You can’t smell anything, hear anything, feel anything, and the taste of catnip befuddles your recollection of memories. ")
+        SetTurnTimeout (5) {
+          firsttime {
+            MoveObject (Ford the cat, Spaceship)
+            RemoveObject (Device)
+          }
+        }
+      </script>
+    </turnscript>
+  </object>
+  <object name="Machine Room">
+    <inherit name="editor_room" />
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>the</prefix>
+    <description type="script"><![CDATA[
+      if (GetBoolean(Babel Fish, "flopping")) {
+        if (Got(Babel Fish)) {
+          msg ("The room extends farther northward.<br/>You enter into a room with a large machine towering menacingly over your small feline body. ")
+        }
+        else {
+          msg ("The room extends farther northward.<br/>You enter into a room with a large machine towering menacingly over your small feline body.<br/><br/>There is a babel fish flopping about.")
+        }
+      }
+      else {
+        msg ("The room extends farther northward.<br/>You enter into a room with a large machine towering menacingly over your small feline body. A glowing button on the machine commands your utmost attention.")
+      }
+    ]]></description>
+    <beforeenter type="script">
+    </beforeenter>
+    <beforefirstenter type="script">
+      msg ("As you walk into a large room, the door behind you slams shut. Guess you won't be able to go back the way you came.")
+    </beforefirstenter>
+    <enter type="script">
+    </enter>
+    <object name="Button">
+      <inherit name="editor_object" />
+      <usestandardverblist />
+      <press type="script">
+        firsttime {
+          msg ("A babel fish shoots out across the room and bounces off the wall, and begins flopping about. ")
+          SetObjectFlagOn (Babel Fish, "flopping")
+        }
+        otherwise {
+          if (Got(Babel Fish)) {
+            firsttime {
+              msg ("It was a lot of effort to catch the last one. Did you really want to do that again? You're not feeling particularily hungry anymore anyways. ")
+            }
+            otherwise {
+              msg ("Really! You don't want another fish! Stop pushing the button!")
+            }
+          }
+          else {
+            msg ("There is a babel fish flopping about the room. Maybe you should do something about that before trying to press the button again?")
+          }
+        }
+      </press>
+      <push type="script">
+        firsttime {
+          msg ("A babel fish shoots out across the room and bounces off the wall, and begins flopping about. ")
+          SetObjectFlagOn (Babel Fish, "flopping")
+        }
+        otherwise {
+          if (Got(Babel Fish)) {
+            firsttime {
+              msg ("It was a lot of effort to catch the last one. Did you really want to do that again? You're not feeling particularily hungry anymore anyways. ")
+            }
+            otherwise {
+              msg ("Really! You don't want another fish! Stop pushing the button!")
+            }
+          }
+          else {
+            msg ("There is a babel fish flopping about the room. Maybe you should do something about that before trying to press the button again?")
+          }
+        }
+      </push>
+      <look type="script">
+        if (not Got(Babel Fish)) {
+          msg ("The button is glowing red.")
+        }
+        else {
+          msg ("This button obviously ejects babel fishes. Or is it babel fish? ")
+        }
+      </look>
+    </object>
+    <object name="Babel Fish">
+      <inherit name="editor_object" />
+      <scenery />
+      <drop type="boolean">false</drop>
+      <usestandardverblist />
+      <catch type="script">
+        if (not Got(Babel Fish)) {
+          msg ("You're going to need to be more specific than that. The babel just flopped left... what are you going to do?")
+        }
+        else {
+          msg ("You already caught the babel fish!")
+        }
+      </catch>
+      <grab type="script">
+        if (not Got(Babel Fish)) {
+          msg ("You're going to need to be more specific than that. The babel just flopped left... what are you going to do?")
+        }
+        else {
+          msg ("You already caught the babel fish!")
+        }
+      </grab>
+    </object>
+    <command>
+      <pattern>dive left</pattern>
+      <script>
+        firsttime {
+          EnableTurnScript (Start the catching)
+        }
+        if (GetBoolean(Babel Fish, "catchable")) {
+          if (not Got(Babel Fish)) {
+            msg ("Nice catch! It's been eons since you last ate anything. You swallow the babel fish whole, satisfying your gnawing hunger. The button on the machine stops glowing. ")
+            MoveObject (Babel Fish, Ford the cat)
+          }
+          else {
+            msg ("Why are you still doing that? You already caught the babel fish.")
+          }
+        }
+        if (not Got(Babel Fish)) {
+          if (not GetBoolean(Babel Fish, "catchable")) {
+            firsttime {
+              msg ("Oh! So close! The babel fish just flopped to the your right. ")
+            }
+            otherwise {
+              firsttime {
+                msg ("Oops! Just as you dive to the left, the babel fish flops right!")
+              }
+              otherwise {
+                msg ("You missed!")
+              }
+            }
+          }
+        }
+      </script>
+    </command>
+    <turnscript name="Start the catching">
+      <script>
+        SetTurnTimeout (4) {
+          SetObjectFlagOn (Babel Fish, "catchable")
+        }
+      </script>
+    </turnscript>
+    <command>
+      <pattern>dive right</pattern>
+      <script>
+        firsttime {
+          EnableTurnScript (Start the catching)
+        }
+        if (GetBoolean(Babel Fish, "catchable")) {
+          if (not Got(Babel Fish)) {
+            msg ("Nice catch! It's been eons since you last ate anything. You swallow the babel fish whole, satisfying your gnawing hunger. The button on the machine stops glowing. ")
+            MoveObject (Babel Fish, Ford the cat)
+          }
+          else {
+            msg ("Why are you still doing that? You already caught the babel fish.")
+          }
+        }
+        if (not Got(Babel Fish)) {
+          if (not GetBoolean(Babel Fish, "catchable")) {
+            firsttime {
+              msg ("Oops! Just as you dive to the right, the babel fish flops left!")
+            }
+            otherwise {
+              firsttime {
+                msg ("You missed!")
+              }
+              otherwise {
+                msg ("Oh! So close! The fish just flopped to the your left. ")
+              }
+            }
+          }
+        }
+      </script>
+    </command>
+    <exit alias="north" to="Machine Room North">
+      <inherit name="northdirection" />
+      <scenery />
+    </exit>
+    <command>
+      <pattern>catch left</pattern>
+      <script>
+        firsttime {
+          EnableTurnScript (Start the catching)
+        }
+        if (GetBoolean(Babel Fish, "catchable")) {
+          if (not Got(Babel Fish)) {
+            msg ("Nice catch! It's been eons since you last ate anything. You swallow the babel fish whole, satisfying your gnawing hunger. The button on the machine stops glowing. ")
+            MoveObject (Babel Fish, Ford the cat)
+          }
+          else {
+            msg ("Why are you still doing that? You already caught the babel fish.")
+          }
+        }
+        if (not Got(Babel Fish)) {
+          if (not GetBoolean(Babel Fish, "catchable")) {
+            firsttime {
+              msg ("Oh! So close! The babel fish just flopped to the your right. ")
+            }
+            otherwise {
+              firsttime {
+                msg ("Oops! Just as you dive to the left, the babel fish flops right!")
+              }
+              otherwise {
+                msg ("You missed!")
+              }
+            }
+          }
+        }
+      </script>
+    </command>
+    <command>
+      <pattern>jump left</pattern>
+      <script>
+        firsttime {
+          EnableTurnScript (Start the catching)
+        }
+        if (GetBoolean(Babel Fish, "catchable")) {
+          if (not Got(Babel Fish)) {
+            msg ("Nice catch! It's been eons since you last ate anything. You swallow the babel fish whole, satisfying your gnawing hunger. The button on the machine stops glowing. ")
+            MoveObject (Babel Fish, Ford the cat)
+          }
+          else {
+            msg ("Why are you still doing that? You already caught the babel fish.")
+          }
+        }
+        if (not Got(Babel Fish)) {
+          if (not GetBoolean(Babel Fish, "catchable")) {
+            firsttime {
+              msg ("Oh! So close! The babel fish just flopped to the your right. ")
+            }
+            otherwise {
+              firsttime {
+                msg ("Oops! Just as you dive to the left, the babel fish flops right!")
+              }
+              otherwise {
+                msg ("You missed!")
+              }
+            }
+          }
+        }
+      </script>
+    </command>
+    <command>
+      <pattern>catch right</pattern>
+      <script>
+        firsttime {
+          EnableTurnScript (Start the catching)
+        }
+        if (GetBoolean(Babel Fish, "catchable")) {
+          if (not Got(Babel Fish)) {
+            msg ("Nice catch! It's been eons since you last ate anything. You swallow the babel fish whole, satisfying your gnawing hunger. The button on the machine stops glowing. ")
+            MoveObject (Babel Fish, Ford the cat)
+          }
+          else {
+            msg ("Why are you still doing that? You already caught the babel fish.")
+          }
+        }
+        if (not Got(Babel Fish)) {
+          if (not GetBoolean(Babel Fish, "catchable")) {
+            firsttime {
+              msg ("Oops! Just as you dive to the right, the babel fish flops left!")
+            }
+            otherwise {
+              firsttime {
+                msg ("You missed!")
+              }
+              otherwise {
+                msg ("Oh! So close! The fish just flopped to the your left. ")
+              }
+            }
+          }
+        }
+      </script>
+    </command>
+    <command>
+      <pattern>jump right</pattern>
+      <script>
+        firsttime {
+          EnableTurnScript (Start the catching)
+        }
+        if (GetBoolean(Babel Fish, "catchable")) {
+          if (not Got(Babel Fish)) {
+            msg ("Nice catch! It's been eons since you last ate anything. You swallow the babel fish whole, satisfying your gnawing hunger. The button on the machine stops glowing. ")
+            MoveObject (Babel Fish, Ford the cat)
+          }
+          else {
+            msg ("Why are you still doing that? You already caught the babel fish.")
+          }
+        }
+        if (not Got(Babel Fish)) {
+          if (not GetBoolean(Babel Fish, "catchable")) {
+            firsttime {
+              msg ("Oops! Just as you dive to the right, the babel fish flops left!")
+            }
+            otherwise {
+              firsttime {
+                msg ("You missed!")
+              }
+              otherwise {
+                msg ("Oh! So close! The fish just flopped to the your left. ")
+              }
+            }
+          }
+        }
+      </script>
+    </command>
+  </object>
+  <verb>
+    <property>press</property>
+    <pattern>press</pattern>
+    <defaultexpression>"You can't press " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="toHidout">
+    <inherit name="editor_room" />
+    <descprefix>You are in</descprefix>
+    <alias>darkness</alias>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <changedname type="script">
+    </changedname>
+    <turnscript>
+      <enabled />
+      <script>
+        msg ("You can’t hear anything, see anything, feel nothing, and you are not entirely sure of who you are.")
+        SetObjectFlagOn (Ford the cat, "inHideout")
+      </script>
+    </turnscript>
+  </object>
+  <object name="Hideout">
+    <inherit name="editor_room" />
+    <description>You’re in a large walled courtyard surrounded by bones and sharp stones. In the middle lies a sandstone memorial.</description>
+    <descprefix type="string"></descprefix>
+    <alias>Courtyard</alias>
+    <object name="Memorial">
+      <look>It's a memorial.  Perhaps getting closer to it might reveal more.</look>
+      <usestandardverblist />
+      <useindividualverblist type="boolean">false</useindividualverblist>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Take</value>
+        <value>scratch</value>
+        <value>write</value>
+      </displayverbs>
+      <attr name="go to" type="script">
+        if (GetBoolean(Beast, "awake")) {
+          if (not GetBoolean(Ford the cat, "spoke")) {
+            SetObjectFlagOn (Ford the cat, "speak")
+            msg ("You run full speed to the memorial, but the beast is right on your tail.   It bellows out in a deep voice, “What is your name?!")
+            get input {
+              switch (result) {
+                case ("Arthur Dent") {
+                  msg ("The beast roars out Arthur Dent and explains that once you are eaten that name will be carved on the memorial ")
+                  SetObjectFlagOn (Ford the cat, "spoke")
+                  SetObjectFlagOn (Ford the cat, "alive")
+                  SetObjectFlagOff (Ford the cat, "speak")
+                }
+                case ("say Arthur Dent") {
+                  msg ("The beast roars out Arthur Dent and explains that once you are eaten that name will be carved on the memorial ")
+                  SetObjectFlagOn (Ford the cat, "spoke")
+                  SetObjectFlagOn (Ford the cat, "alive")
+                  SetObjectFlagOff (Ford the cat, "speak")
+                }
+                case ("arthur dent") {
+                  msg ("The beast roars out Arthur Dent and explains that once you are eaten that name will be carved on the memorial ")
+                  SetObjectFlagOn (Ford the cat, "spoke")
+                  SetObjectFlagOn (Ford the cat, "alive")
+                  SetObjectFlagOff (Ford the cat, "speak")
+                }
+                default {
+                  SetObjectFlagOn (Ford the cat, "spoke")
+                  msg ("The beast roars out your name and explains that once you are eaten your name will be carved on the memorial ")
+                  SetObjectFlagOff (Ford the cat, "speak")
+                }
+              }
+            }
+          }
+          else {
+            msg ("You're already at the memorial!")
+          }
+        }
+        else {
+          msg ("You make your way to the memorial among the remains of past adventurers.  On it you notice scribbles in a language you don’t understand.  However you do recognize one signature, it’s your slave’s, Arthur Dent’s.  You can also go behind it.")
+        }
+      </attr>
+      <scratch type="script">
+        msg ("You scratch at the memorial")
+        firsttime {
+          msg ("Your claws are getting sharp.")
+          IncreaseObjectCounter (Ford the cat, "sharpenClaws")
+        }
+        otherwise {
+          msg ("But it's getting really boring.")
+        }
+      </scratch>
+      <hide type="script"><![CDATA[
+        if (not GetBoolean(Beast, "awake")) {
+          msg ("You're behind the memorial.  How exciting!")
+          firsttime {
+            msg ("Hey wait there's an AnitBugblatter Beast Ray Gun over here!")
+            MakeObjectVisible (Anti Bugblatter Beast Ray Gun)
+          }
+        }
+        else if (GetBoolean(Ford the cat, "alive")) {
+          msg ("You duck behind the memorial, terrified, why me you wonder, why not anybody but me.  The beast looks around confused and wonders where you went.  It peers at the memorial and notices Arthur Dent’s name is carved into it. “Ah” it thinks, “I killed that cat without thinking and then carved his name afterwards, just like I did with that other fellow.”  You see the beast turn around and amble off into the distance.  You sigh with relief.<br/>")
+          SetObjectFlagOn (Ford the cat, "solved")
+          SetObjectFlagOff (Beast, "awake")
+          UnlockExit (PassageToInnerLair)
+        }
+        else {
+          msg ("You duck behind the memorial, terrified, why me you wonder, why not anybody but me.  The beast looks around confused and wonders where you went.  Angrily, the beast stomps the ground and you curiously peek your head out from the memorial.  \"Ah ha! There you are! Now you shall suffer!\"  In one bite you are dead!")
+          MoveObject (Ford the cat, toHidout)
+          SetObjectFlagOff (Beast, "awake")
+          SetObjectFlagOff (Ford the cat, "spoke")
+          SetObjectFlagOff (Ford the cat, "speak")
+          Death
+          msg (" Luckily you have nine lives and wake up in...")
+        }
+      ]]></hide>
+      <write type="script">
+        msg ("You start to write your name on the memorial.  Oh wait you forgot, you don't know how to write.  You're a cat.")
+      </write>
+      <claw type="script">
+        firsttime {
+          msg ("You scratch at a stone.  What did it ever do to you?")
+          IncreaseObjectCounter (Ford the cat, "sharpenClaws")
+        }
+        otherwise {
+          msg ("Don't you have more important things to do than scratch at poor innocent stones?")
+        }
+      </claw>
+    </object>
+    <object name="stones">
+      <inherit name="editor_object" />
+      <look>Large, flat stones are scattered across the courtyard.</look>
+      <alt type="stringlist">
+        <value>rocks</value>
+        <value>stone</value>
+        <value>rock</value>
+        <value>stones</value>
+      </alt>
+      <take />
+      <takemsg>You grab a stone with your mouth.</takemsg>
+      <dropmsg>You spit out the stone.  </dropmsg>
+      <inventoryverbs type="stringlist">
+        <value>Look at</value>
+        <value>Use</value>
+        <value>Drop</value>
+      </inventoryverbs>
+      <useindividualverblist type="boolean">false</useindividualverblist>
+      <throw type="script">
+        if (GetBoolean(Beast, "awake")) {
+          msg ("You scamper towards the first stone you see, pick it up with your teeth and chuck it wildy in a random direction.  It lands directly on the beast's gaping mouth.  He bites down and crushes it before looking squarely at you, as if to say you're next.")
+        }
+        else if (Got(stones)) {
+          msg ("You throw the stone and it lands a couple centimetres in front of you.")
+          MoveObjectHere (stones)
+        }
+        else {
+          msg ("Pick it up first!")
+        }
+      </throw>
+      <throwstoneatbeast type="script">
+        if (GetBoolean(Beast, "awake")) {
+          if (Got(stones)) {
+            msg ("You throw the stone at him but it only seems to make him madder.")
+            MoveObjectHere (stones)
+          }
+          else {
+            msg ("You scamper towards the first stone you see, pick it up with your teeth and chuck it wildy in a random direction.  It lands directly on the beast's gaping mouth.  He bites down and crushes it before looking squarely at you, as if to say you're next.")
+          }
+        }
+        else if (Got(stones)) {
+          firsttime {
+            msg ("You throw it and it bounces off the beast, causing the loudest crashing noise you have ever heard.  The ground literally starts to shake and you tumble to the ground.  Finally you stumble to your feet, blink a few times to recover and notice the beast is still asleep.")
+            MoveObjectHere (stones)
+          }
+          otherwise {
+            msg ("Yeah right.  Like you're doing that again")
+          }
+        }
+        else {
+          msg ("Pick it up first!")
+        }
+      </throwstoneatbeast>
+      <scratch type="script">
+        firsttime {
+          msg ("You scratch at a stone.  What did it ever do to you?")
+          IncreaseObjectCounter (Ford the cat, "sharpenClaws")
+        }
+        otherwise {
+          msg ("Don't you have more important things to do than scratch at poor innocent stones?")
+        }
+      </scratch>
+      <claw type="script">
+        firsttime {
+          msg ("You scratch at a stone.  What did it ever do to you?")
+          IncreaseObjectCounter (Ford the cat, "sharpenClaws")
+        }
+        otherwise {
+          msg ("Don't you have more important things to do than scratch at poor innocent stones?")
+        }
+      </claw>
+    </object>
+    <object name="Beast">
+      <inherit name="editor_object" />
+      <jumpover type="script">
+        if (GetBoolean(Beast, "awake")) {
+          Death
+          msg ("You attempt to jump over him but he grabs you with his sharp teeth instead.  Ouch you're dead!  Don't panic! Luckily cats have nine lives. You return from the dead right before you decided to jump over him.")
+        }
+        else {
+          msg ("You attempt to jump over the beast but its skin is too slippery and and you keep sliding down.")
+        }
+      </jumpover>
+      <look type="script">
+        if (GetBoolean(Ford the cat, "solved")) {
+          msg ("The bugblatter beast of Traal snoozes peacefully. Aww.")
+        }
+        else {
+          if (not GetBoolean(Beast, "awake")) {
+            msg ("It's a large beast blocking your path, it has skin, some would say like a motorway.  It snores loudly and contentedly, like it just had a big meal.")
+          }
+          else {
+            msg ("It towers over you with its jutting fangs inches away from your face.  Phew that breath is awful.")
+          }
+        }
+      </look>
+      <scratch type="script"><![CDATA[
+        if (GetBoolean(Ford the cat, "solved")) {
+          msg ("You're about to swipe him, when a voice from the heavens calls out, \"No! For the love of God no!\"")
+        }
+        else {
+          if (GetBoolean(Beast, "awake")) {
+            msg ("You turn to face the beast, but before you can scratch him, the terrible breath of the beast knocks you out.")
+          }
+          else {
+            if (GetInt(Ford the cat, "sharpenClaws") = 0) {
+              msg ("you scratch the beast with your pathetic dull claws and it doesn't even make a sound.")
+            }
+            else if (GetInt(Ford the cat, "sharpenClaws") = 1) {
+              msg ("You scratch the beast with your somewhat sharp claws and you think you hear it wimper!")
+            }
+            else {
+              msg ("You scratch at the beast with your super sharp claws and it groans deeply before rising to its feet with a loud roar.  Maybe trying to wake it up wasn't such a good idea.<br/>")
+              SetObjectFlagOn (Beast, "awake")
+            }
+          }
+        }
+      ]]></scratch>
+      <claw type="script">
+        firsttime {
+          msg ("You scratch at a stone.  What did it ever do to you?")
+          IncreaseObjectCounter (Ford the cat, "sharpenClaws")
+        }
+        otherwise {
+          msg ("Don't you have more important things to do than scratch at poor innocent stones?")
+        }
+      </claw>
+    </object>
+    <exit name="PassageToInnerLair" alias="north" to="InnerLair">
+      <inherit name="northdirection" />
+      <locked type="boolean">false</locked>
+      <lockmessage>The beast is blocking the way.  </lockmessage>
+      <runscript />
+      <script type="script">
+        if (GetBoolean(Ford the cat, "solved")) {
+          MoveObject (Ford the cat, InnerLair)
+        }
+        else if (GetBoolean(Beast, "awake")) {
+          Death
+          msg ("You make a beeline toward the north exit but the beast follows you and in one swift move, you have been eaten by the beast!  Don't panic! You still have some lives left! You wake up right before you decided to go north.  Maybe you should try something else..?")
+        }
+        else {
+          msg ("The beast is blocking the path.")
+        }
+      </script>
+    </exit>
+    <object name="bones">
+      <inherit name="editor_object" />
+      <chew>Um no.</chew>
+      <look>They're scattered across the hideout.  Careful not to step on them.</look>
+      <scratch>You scratch at a bone and it comes apart.  Green ooze spills from it.  What the heck?</scratch>
+    </object>
+    <object name="Anti Bugblatter Beast Ray Gun">
+      <inherit name="editor_object" />
+      <visible type="boolean">false</visible>
+      <look>Cool an Anti-Bugblatter Beast Ray Gun.</look>
+      <take type="boolean">false</take>
+      <takemsg>You better not.  Your cat instincts can smell a red herring any day.</takemsg>
+    </object>
+    <command>
+      <pattern>write on memorial</pattern>
+      <script>
+        msg ("You start to write your name on the memorial.  Oh wait you forgot, you don't know how to write.  You're a cat.")
+      </script>
+    </command>
+    <command>
+      <pattern>throw stone at beast</pattern>
+      <script>
+        if (GetBoolean(Beast, "awake")) {
+          if (Got(stones)) {
+            msg ("You throw the stone at him but it only seems to make him madder.")
+            MoveObjectHere (stones)
+          }
+          else {
+            msg ("You scamper towards the first stone you see, pick it up with your teeth and chuck it wildy in a random direction.  It lands directly on the beast's gaping mouth.  He bites down and crushes it before looking squarely at you, as if to say you're next.")
+          }
+        }
+        else if (Got(stones)) {
+          firsttime {
+            msg ("You throw it and it bounces off the beast, causing the loudest crashing noise you have ever heard.  The ground literally starts to shake and you tumble to the ground.  Finally you stumble to your feet, blink a few times to recover and notice the beast is still asleep.")
+            MoveObjectHere (stones)
+          }
+          otherwise {
+            msg ("Yeah right.  Like you're doing that again")
+          }
+        }
+        else {
+          msg ("Pick it up first!")
+        }
+      </script>
+    </command>
+    <command>
+      <pattern>throw stones at beast</pattern>
+      <script>
+        if (GetBoolean(Beast, "awake")) {
+          if (Got(stones)) {
+            msg ("You throw the stone at him but it only seems to make him madder.")
+            MoveObjectHere (stones)
+          }
+          else {
+            msg ("You scamper towards the first stone you see, pick it up with your teeth and chuck it wildy in a random direction.  It lands directly on the beast's gaping mouth.  He bites down and crushes it before looking squarely at you, as if to say you're next.")
+          }
+        }
+        else if (Got(stones)) {
+          firsttime {
+            msg ("You throw it and it bounces off the beast, causing the loudest crashing noise you have ever heard.  The ground literally starts to shake and you tumble to the ground.  Finally you stumble to your feet, blink a few times to recover and notice the beast is still asleep.")
+            MoveObjectHere (stones)
+          }
+          otherwise {
+            msg ("Yeah right.  Like you're doing that again")
+          }
+        }
+        else {
+          msg ("Pick it up first!")
+        }
+      </script>
+    </command>
+    <command>
+      <pattern>hide</pattern>
+      <script><![CDATA[
+        if (not GetBoolean(Beast, "awake")) {
+          msg ("You're behind the memorial.  How exciting!")
+          firsttime {
+            msg ("Hey wait there's an AnitBugblatter Beast Ray Gun over here!")
+            MakeObjectVisible (Anti Bugblatter Beast Ray Gun)
+          }
+        }
+        else if (GetBoolean(Ford the cat, "alive")) {
+          msg ("You duck behind the memorial, terrified, why me you wonder, why not anybody but me.  The beast looks around confused and wonders where you went.  It peers at the memorial and notices Arthur Dent’s name is carved into it. “Ah” it thinks, “I killed that cat without thinking and then carved his name afterwards, just like I did with that other fellow.”  You see the beast turn around and amble off into the distance.  You sigh with relief.<br/>")
+          SetObjectFlagOn (Ford the cat, "solved")
+          SetObjectFlagOff (Beast, "awake")
+          UnlockExit (PassageToInnerLair)
+        }
+        else {
+          msg ("You duck behind the memorial, terrified, why me you wonder, why not anybody but me.  The beast looks around confused and wonders where you went.  Angrily, the beast stomps the ground and you curiously peek your head out from the memorial.  \"Ah ha! There you are! Now you shall suffer!\"  In one bite you are dead!")
+          MoveObject (Ford the cat, toHidout)
+          SetObjectFlagOff (Beast, "awake")
+          SetObjectFlagOff (Ford the cat, "spoke")
+          SetObjectFlagOff (Ford the cat, "speak")
+          Death
+          msg (" Luckily you have nine lives and wake up in...")
+        }
+      ]]></script>
+    </command>
+    <command>
+      <pattern>hide behind memorial</pattern>
+      <script><![CDATA[
+        if (not GetBoolean(Beast, "awake")) {
+          msg ("You're behind the memorial.  How exciting!")
+          firsttime {
+            msg ("Hey wait there's an AnitBugblatter Beast Ray Gun over here!")
+            MakeObjectVisible (Anti Bugblatter Beast Ray Gun)
+          }
+        }
+        else if (GetBoolean(Ford the cat, "alive")) {
+          msg ("You duck behind the memorial, terrified, why me you wonder, why not anybody but me.  The beast looks around confused and wonders where you went.  It peers at the memorial and notices Arthur Dent’s name is carved into it. “Ah” it thinks, “I killed that cat without thinking and then carved his name afterwards, just like I did with that other fellow.”  You see the beast turn around and amble off into the distance.  You sigh with relief.<br/>")
+          SetObjectFlagOn (Ford the cat, "solved")
+          SetObjectFlagOff (Beast, "awake")
+          UnlockExit (PassageToInnerLair)
+        }
+        else {
+          msg ("You duck behind the memorial, terrified, why me you wonder, why not anybody but me.  The beast looks around confused and wonders where you went.  Angrily, the beast stomps the ground and you curiously peek your head out from the memorial.  \"Ah ha! There you are! Now you shall suffer!\"  In one bite you are dead!")
+          MoveObject (Ford the cat, toHidout)
+          SetObjectFlagOff (Beast, "awake")
+          SetObjectFlagOff (Ford the cat, "spoke")
+          SetObjectFlagOff (Ford the cat, "speak")
+          Death
+          msg (" Luckily you have nine lives and wake up in...")
+        }
+      ]]></script>
+    </command>
+    <command>
+      <pattern>go behind memorial</pattern>
+      <script><![CDATA[
+        if (not GetBoolean(Beast, "awake")) {
+          msg ("You're behind the memorial.  How exciting!")
+          firsttime {
+            msg ("Hey wait there's an AnitBugblatter Beast Ray Gun over here!")
+            MakeObjectVisible (Anti Bugblatter Beast Ray Gun)
+          }
+        }
+        else if (GetBoolean(Ford the cat, "alive")) {
+          msg ("You duck behind the memorial, terrified, why me you wonder, why not anybody but me.  The beast looks around confused and wonders where you went.  It peers at the memorial and notices Arthur Dent’s name is carved into it. “Ah” it thinks, “I killed that cat without thinking and then carved his name afterwards, just like I did with that other fellow.”  You see the beast turn around and amble off into the distance.  You sigh with relief.<br/>")
+          SetObjectFlagOn (Ford the cat, "solved")
+          SetObjectFlagOff (Beast, "awake")
+          UnlockExit (PassageToInnerLair)
+        }
+        else {
+          msg ("You duck behind the memorial, terrified, why me you wonder, why not anybody but me.  The beast looks around confused and wonders where you went.  Angrily, the beast stomps the ground and you curiously peek your head out from the memorial.  \"Ah ha! There you are! Now you shall suffer!\"  In one bite you are dead!")
+          MoveObject (Ford the cat, toHidout)
+          SetObjectFlagOff (Beast, "awake")
+          SetObjectFlagOff (Ford the cat, "spoke")
+          SetObjectFlagOff (Ford the cat, "speak")
+          Death
+          msg (" Luckily you have nine lives and wake up in...")
+        }
+      ]]></script>
+    </command>
+  </object>
+  <verb>
+    <property>tothehideout</property>
+    <pattern>tothehideout</pattern>
+    <defaultexpression>"You can't tothehideout " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="InnerLair">
+    <inherit name="editor_room" />
+    <description>You are in the inner lair of the beast’s hideout.</description>
+    <enter type="script">
+    </enter>
+    <exit alias="south" to="Hideout">
+      <inherit name="southdirection" />
+    </exit>
+    <object name="Motherboard">
+      <inherit name="editor_object" />
+      <look>Sweet! A motherboard!  It's not edible but oh well.</look>
+      <take />
+      <drop type="boolean">false</drop>
+      <takemsg>After taking the device, the bugblatter beast of Traal comes back to see you ravenging through its belongings.  The beast picks up speed and in a second...</takemsg>
+      <useindividualverblist type="boolean">false</useindividualverblist>
+      <ontake type="script">
+        MoveObject (Ford the cat, toGreenHouse)
+      </ontake>
+      <pickupobject type="script">
+        msg ("After taking the device, the bugblatter beast of Traal comes back to see you ravenging through its belongings.  The beast picks up speed and in a second...")
+        MoveObject (Ford the cat, toGreenHouse)
+      </pickupobject>
+    </object>
+  </object>
+  <verb>
+    <property>throwstoneatbeast</property>
+    <pattern>throw stone at beast</pattern>
+    <defaultexpression>"You can't throw stone at beast " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>jumpover</property>
+    <pattern>jump over</pattern>
+    <defaultexpression>"You can't jump over " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="Greenhouse">
+    <inherit name="editor_room" />
+    <beforeenter type="script">
+      msg ("You find yourself surrounded by an indoor greenhouse filled with the greenest vegetation you’ve ever seen. The trees are tall, luscious, and purrfect for climbing.")
+      SetObjectFlagOn (Ford the cat, "onGround")
+    </beforeenter>
+    <object name="Tree">
+      <inherit name="editor_object" />
+      <climb type="script">
+        if (GetBoolean(Ford the cat, "energized")) {
+          if (GetBoolean(Ford the cat, "onGround")) {
+            msg ("You feel like you can take on anything and jump for the first branch of the tree! You are successful in your attempt and find yourself on the first branch!")
+            SetObjectFlagOn (Ford the cat, "onFirstBranch")
+            SetObjectFlagOff (Ford the cat, "onGround")
+          }
+          else if (GetBoolean(Ford the cat, "onFirstBranch")) {
+            msg ("Going further up the tree is much easier now that you have made the big first leap. You find yourself very high in the tree and see a string-like cord that reminds you of yarn.")
+            SetObjectFlagOn (Ford the cat, "onSecondBranch")
+            SetObjectFlagOff (Ford the cat, "onFirstBranch")
+          }
+          else if (GetBoolean(Ford the cat, "onSecondBranch")) {
+            msg ("You continue up the tree and spot the Cord again. The end of the cord is not in sight.")
+            SetObjectFlagOn (Ford the cat, "onThirdBranch")
+            SetObjectFlagOff (Ford the cat, "onSecondBranch")
+          }
+          else if (GetBoolean(Ford the cat, "onThirdBranch")) {
+            msg ("You’re at the top of the tree now and the cord is attached to a Keyboard.")
+            SetObjectFlagOn (Ford the cat, "onFourthBranch")
+            SetObjectFlagOff (Ford the cat, "onThirdBranch")
+            SetObjectFlagOff (Ford the cat, "energized")
+          }
+          else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+            msg ("You're at the top of the tree! You can't climb any higher.")
+          }
+        }
+        else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          msg ("You're at the top of the tree! You can't climb any higher.")
+        }
+        else {
+          msg ("You are feeling a little bit sluggish. Your cat aerobics are not good enough for you to make it to the first branch.")
+        }
+      </climb>
+      <look type="script">
+        if (not GetBoolean(Ford the cat, "energized")) {
+          if (not GetBoolean(Ford the cat, "onFourthBranch")) {
+            msg ("A very tall tree. It has great leafy branches, although it would take quite the jump to get up to them.")
+          }
+          else {
+            msg ("You are at the top of the tree. You have a great view from here, and are surrounded by lush green leaves. They appear to be similar to the plants you nibbled on before.")
+          }
+        }
+        else {
+          msg ("You are in the middle of the tree. Your view is blocked by the lush foliage.")
+        }
+      </look>
+    </object>
+    <object name="Plants">
+      <inherit name="editor_object" />
+      <look>They are deep green and have dew dripping off their leaves. They appear safe to eat.</look>
+      <usedefaultprefix type="boolean">false</usedefaultprefix>
+      <gender>them</gender>
+      <article>them</article>
+      <eat type="script">
+        msg ("You take a few nibbles from one of the nearby plants and are feeling unusually energetic.")
+        SetObjectFlagOn (Ford the cat, "energized")
+      </eat>
+    </object>
+    <command>
+      <pattern>look; look around</pattern>
+      <script>
+        if (GetBoolean(Ford the cat, "onGround")) {
+          msg ("The room is vibrant and lush with plants. The trees are very tall and great for climbing, but the first branches are too high up.")
+        }
+        else if (not GetBoolean(Ford the cat, "onGround")) {
+          if (not GetBoolean(Ford the cat, "onFourthBranch")) {
+            msg ("You are in the middle of the tree. Your view is blocked by the lush foliage.")
+          }
+          else {
+            msg ("You are at the top of the tree. You have a great view from here, and are surrounded by lush green leaves. They appear to be similar to the plants you nibbled on before.")
+          }
+        }
+        else {
+        }
+      </script>
+    </command>
+    <object name="Cord">
+      <inherit name="editor_object" />
+      <scenery />
+      <swat type="script">
+        if (GetBoolean(Ford the cat, "onSecondBranch")) {
+          msg ("The cord sways when you hit it, but remains in place.")
+        }
+        else if (GetBoolean(Ford the cat, "onThirdBranch")) {
+          msg ("You cannot reach the cord from here.")
+        }
+        else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          msg ("Maybe you should be more interested in what it is attached to.")
+        }
+        else {
+          msg ("You cannot see the cord anymore.")
+        }
+      </swat>
+      <take type="script">
+        if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          msg ("It is attached to the keyboard!")
+        }
+        else {
+          msg ("It is attached to something higher up in the tree. You cannot take it.")
+        }
+      </take>
+      <scratch type="script">
+        if (GetBoolean(Ford the cat, "onSecondBranch")) {
+          msg ("The cord sways when you hit it, but remains in place.")
+        }
+        else if (GetBoolean(Ford the cat, "onThirdBranch")) {
+          msg ("You cannot reach the cord from here.")
+        }
+        else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          msg ("Maybe you should be more interested in what it is attached to.")
+        }
+        else {
+          msg ("You cannot see the cord anymore.")
+        }
+      </scratch>
+      <hit type="script">
+        if (GetBoolean(Ford the cat, "onSecondBranch")) {
+          msg ("The cord sways when you hit it, but remains in place.")
+        }
+        else if (GetBoolean(Ford the cat, "onThirdBranch")) {
+          msg ("You cannot reach the cord from here.")
+        }
+        else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          msg ("Maybe you should be more interested in what it is attached to.")
+        }
+        else {
+          msg ("You cannot see the cord anymore.")
+        }
+      </hit>
+      <claw type="script">
+        if (GetBoolean(Ford the cat, "onSecondBranch")) {
+          msg ("The cord sways when you hit it, but remains in place.")
+        }
+        else if (GetBoolean(Ford the cat, "onThirdBranch")) {
+          msg ("You cannot reach the cord from here.")
+        }
+        else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          msg ("Maybe you should be more interested in what it is attached to.")
+        }
+        else {
+          msg ("You cannot see the cord anymore.")
+        }
+      </claw>
+      <grab type="script">
+        if (GetBoolean(Ford the cat, "onSecondBranch")) {
+          msg ("The cord sways when you hit it, but remains in place.")
+        }
+        else if (GetBoolean(Ford the cat, "onThirdBranch")) {
+          msg ("You cannot reach the cord from here.")
+        }
+        else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          msg ("Maybe you should be more interested in what it is attached to.")
+        }
+        else {
+          msg ("You cannot see the cord anymore.")
+        }
+      </grab>
+    </object>
+    <object name="Keyboard">
+      <inherit name="editor_object" />
+      <scenery />
+      <take />
+    </object>
+    <command>
+      <pattern>stay; stay in tree; stay here</pattern>
+      <script>
+        msg ("The view is nice from the tree, but you are ready to be back on the ground.")
+      </script>
+    </command>
+    <command>
+      <pattern>eat leaf; eat leaves</pattern>
+      <script>
+        if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          msg ("You take a bite off one of the leaves from the tree.")
+          SetObjectFlagOn (Ford the cat, "ateLeaf")
+        }
+      </script>
+    </command>
+    <command>
+      <pattern>wait</pattern>
+      <script>
+        if (GetBoolean(Ford the cat, "ateLeaf")) {
+          msg ("You wait and feel much more mellow. Something in the leaf has made you more relaxed and carefree. ")
+          SetObjectFlagOn (Ford the cat, "mellowed")
+        }
+      </script>
+    </command>
+    <command>
+      <pattern>go down; climb down; climb down tree</pattern>
+      <script>
+        if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          firsttime {
+            msg ("Climbing up the tree was easy, but getting down is seemingly impossible.")
+          }
+          otherwise {
+            if (GetBoolean(Ford the cat, "mellowed")) {
+              msg ("You climb down the tree and make it to the ground safely.  ")
+              SetObjectFlagOn (Ford the cat, "onGround")
+              SetObjectFlagOff (Ford the cat, "onFourthBranch")
+              MoveObject (Ford the cat, thirdDark)
+            }
+            else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+              if (not GetBoolean(Ford the cat, "ateLeaf")) {
+                msg ("You have a longing to get down the tree, but whenever you try to make a move you are paralyzed.")
+              }
+              else {
+                msg ("You need some more time for the leaf to take effect.")
+              }
+            }
+          }
+        }
+        else {
+          msg ("You don't want to climb down yet.")
+        }
+      </script>
+    </command>
+    <command>
+      <pattern>climb up; climb; climb up tree; go up</pattern>
+      <script>
+        if (GetBoolean(Ford the cat, "energized")) {
+          if (GetBoolean(Ford the cat, "onGround")) {
+            msg ("You feel like you can take on anything and jump for the first branch of the tree! You are successful in your attempt and find yourself on the first branch!")
+            SetObjectFlagOn (Ford the cat, "onFirstBranch")
+            SetObjectFlagOff (Ford the cat, "onGround")
+          }
+          else if (GetBoolean(Ford the cat, "onFirstBranch")) {
+            msg ("Going further up the tree is much easier now that you have made the big first leap. You find yourself very high in the tree and see a string-like cord that reminds you of yarn.")
+            SetObjectFlagOn (Ford the cat, "onSecondBranch")
+            SetObjectFlagOff (Ford the cat, "onFirstBranch")
+          }
+          else if (GetBoolean(Ford the cat, "onSecondBranch")) {
+            msg ("You continue up the tree and spot the Cord again. The end of the cord is not in sight.")
+            SetObjectFlagOn (Ford the cat, "onThirdBranch")
+            SetObjectFlagOff (Ford the cat, "onSecondBranch")
+          }
+          else if (GetBoolean(Ford the cat, "onThirdBranch")) {
+            msg ("You’re at the top of the tree now and the cord is attached to a Keyboard.")
+            SetObjectFlagOn (Ford the cat, "onFourthBranch")
+            SetObjectFlagOff (Ford the cat, "onThirdBranch")
+            SetObjectFlagOff (Ford the cat, "energized")
+          }
+          else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+            msg ("You're at the top of the tree! You can't climb any higher.")
+          }
+        }
+        else if (GetBoolean(Ford the cat, "onFourthBranch")) {
+          msg ("You're at the top of the tree! You can't climb any higher.")
+        }
+        else {
+          msg ("You are feeling a little bit sluggish. Your cat aerobics are not good enough for you to make it to the first branch.")
+        }
+      </script>
+    </command>
+  </object>
+  <verb>
+    <property>hide</property>
+    <pattern>hide; hide behind; hide beside</pattern>
+    <defaultexpression>"You can't hide; hide behind; hide beside " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>catch</property>
+    <pattern>catch</pattern>
+    <defaultexpression>"You can't catch " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="Machine Room North">
+    <inherit name="editor_room" />
+    <alias>Machine Room</alias>
+    <description type="string"></description>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <prefix>the</prefix>
+    <descprefix>You are still in</descprefix>
+    <firstenter type="script"><![CDATA[
+      msg ("You can move back to the southern end.<br/><br/>You are in the northern part of the machine room. The dingy room does not contain much besides a box placed in the middle of the floor,  and a door in the corner.")
+    ]]></firstenter>
+    <enter type="script">
+      msg ("You are back in the northern part of the machine room.")
+    </enter>
+    <exit name="Computer Door" alias="south" to="Machine Room">
+      <inherit name="southdirection" />
+      <lockmessage>The door is sealed.</lockmessage>
+      <locked />
+      <scenery />
+    </exit>
+    <object name="door1">
+      <inherit name="editor_object" />
+      <inherit name="openable" />
+      <alias>Fancy door</alias>
+      <scenery type="boolean">false</scenery>
+      <drop type="boolean">false</drop>
+      <look>It seems the door is connected to a computer that is missing a few of its vital parts. Without them, it doesn't appear that you will be able to operate the computer to open the door. </look>
+      <feature_container />
+      <open />
+      <openscript type="script"><![CDATA[
+        if (Got(Keyboard)) {
+          if (Got(mouse2)) {
+            if (Got(Motherboard)) {
+              msg ("The door opens and inside is your beloved slave. He is extremely glad of your presence and embraces you with utter joy.<br/><br/>You  and your slave  get shot out of the ship with impeccable force. When your consciousness  returns you and your slave are inside the Heart of Gold ship. This is a safe haven for you and your slave both rescued from the burden of being entrapped on the Vogon ship.<br/><br/>...Happily ever after<br/>")
+            }
+          }
+        }
+        else {
+          msg ("The door won’t budge. ")
+          msg ("It seems the door is connected to a computer that is missing a few of its vital parts. Without them, it doesn't appear that you will be able to operate the computer to open the door. ")
+        }
+      ]]></openscript>
+      <push type="script"><![CDATA[
+        if (Got(Keyboard)) {
+          if (Got(mouse2)) {
+            if (Got(Motherboard)) {
+              if (GetBoolean(Ford the cat, "assembled")) {
+                msg ("The door opens and inside is your beloved slave. He is extremely glad of your presence and embraces you with utter joy.<br/><br/>You  and your slave  get shot out of the ship with impeccable force. When your consciousness  returns you and your slave are inside the Heart of Gold ship. This is a safe haven for you and your slave both rescued from the burden of being entrapped on the Vogon ship.<br/><br/>...Happily ever after<br/>")
+              }
+            }
+          }
+        }
+        else {
+          msg ("It seems the door is connected to a computer that is missing a few of its vital parts. Without them, it doesn't appear that you will be able to operate the computer to open the door. ")
+        }
+      ]]></push>
+    </object>
+    <object name="Box">
+      <inherit name="editor_object" />
+      <inherit name="openable" />
+      <scenery type="boolean">false</scenery>
+      <takemsg>The box is too heavy to lift.</takemsg>
+      <feature_container />
+      <close type="boolean">false</close>
+      <useindividualverblist type="boolean">false</useindividualverblist>
+      <inventoryverbs type="stringlist">
+        <value>Look at</value>
+        <value>Use</value>
+        <value>Drop</value>
+      </inventoryverbs>
+      <usestandardverblist />
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Take</value>
+        <value>Open</value>
+      </displayverbs>
+      <look>It's a very large box. Must contain something heavy.</look>
+      <openscript type="script">
+        msg ("Inside the box there is a machine with a lever.")
+        HelperOpenObject (Box)
+      </openscript>
+      <knockover type="script">
+        if (Box.isopen) {
+          msg ("The machine tumbles out from the box.")
+        }
+        else {
+          msg ("Nothing is going to happen unless you open the box. ")
+        }
+      </knockover>
+      <tipover type="script">
+        if (Box.isopen) {
+          msg ("The machine tumbles out from the box.")
+        }
+        else {
+          msg ("Nothing is going to happen unless you open the box. ")
+        }
+      </tipover>
+      <push type="script">
+        if (Box.isopen) {
+          msg ("The machine tumbles out from the box.")
+        }
+        else {
+          msg ("Nothing is going to happen unless you open the box. ")
+        }
+      </push>
+    </object>
+    <object name="Lever machine">
+      <inherit name="editor_object" />
+      <takemsg>The box is too deep for you to lift out the lever. </takemsg>
+      <scenery />
+      <take type="script">
+        if (not Box.isopen) {
+          msg ("The box is too deep for you to lift out the lever. ")
+        }
+        else {
+          msg ("The lever machine is too heavy for you to lift it. ")
+        }
+      </take>
+      <pull type="script">
+        if (not GetBoolean(Lever machine, "pullable")) {
+          msg ("You are unable to grip the lever with your paws. Try another extremity.")
+        }
+        else {
+          msg ("Pulling the lever with all your little kitty might, you manage to move it. Just as you hear the click of the lever locking into position, a fog encompasses you.")
+          MoveObject (Ford the cat, toHidout)
+        }
+      </pull>
+    </object>
+    <command>
+      <pattern>use tail</pattern>
+      <script>
+        msg ("You manage to wrap your tail around the lever. ")
+        SetObjectFlagOn (Lever machine, "pullable")
+      </script>
+    </command>
+    <object name="Computer">
+      <inherit name="editor_object" />
+      <assembleparts type="script"><![CDATA[
+        if (Got(Keyboard)) {
+          if (Got(mouse2)) {
+            if (Got(Motherboard)) {
+              msg ("The items you have retrieved come together and create a complete computer set. <br/>")
+            }
+          }
+        }
+        else {
+          msg ("You can't operate the computer if you don't have all the parts to assemble!")
+        }
+      ]]></assembleparts>
+      <hit type="script"><![CDATA[
+        msg ("Hitting the computer does not do you any good!<br/>")
+      ]]></hit>
+      <assemble type="script">
+        if (Got(Keyboard)) {
+          if (Got(mouse2)) {
+            if (Got(Motherboard)) {
+              msg ("You assemble all of the various parts you collected into the computer. (Who knew a cat possessed such a skill). After a short while of loading, a green light on the computer lights up and the door unlocks!")
+              SetObjectFlagOn (Ford the cat, "assembled")
+            }
+          }
+        }
+        else {
+          msg ("You don't have any parts to assemble!")
+        }
+      </assemble>
+      <look>It's a computer that's missing some of its vital pieces.  From your understanding it's missing a keyboard, a mouse, and a motherboard.  </look>
+    </object>
+  </object>
+  <verb>
+    <property>knockover</property>
+    <pattern>knock over</pattern>
+    <defaultexpression>"You can't knock over " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>tipover</property>
+    <pattern>tip over</pattern>
+    <defaultexpression>"You can't tip over " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>tothemachineroom</property>
+    <pattern>tothemachineroom</pattern>
+    <defaultexpression>"You can't tothemachineroom " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>gotospaceship</property>
+    <pattern>gotospaceship</pattern>
+    <defaultexpression>"You can't gotospaceship " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="Spaceship">
+    <inherit name="editor_room" />
+    <description><![CDATA[The Spaceship is extemely dark. Lucky for you, you're a cat. Cats have nocturnal vision. You notice your slave is gone, along with your device.<br/>The only way you seem able to go is northwest.]]></description>
+    <exit alias="northwest" to="Machine Room">
+      <inherit name="northwestdirection" />
+      <scenery />
+    </exit>
+  </object>
+  <verb>
+    <property>write</property>
+    <pattern>write</pattern>
+    <defaultexpression>"You can't write " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>chew</property>
+    <pattern>chew</pattern>
+    <defaultexpression>"You can't chew " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>grab</property>
+    <pattern>grab</pattern>
+    <defaultexpression>"You can't grab " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="toGreenHouse">
+    <inherit name="editor_room" />
+    <alias>Darkness</alias>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <beforeenter type="script">
+      EnableTurnScript (gardenDarkness)
+    </beforeenter>
+    <turnscript name="gardenDarkness">
+      <script>
+        firsttime {
+          msg ("You can’t hear anything, see anything, smell anything, feel nothing, and you are not entirely sure of who you are.")
+        }
+        otherwise {
+          msg ("You can’t hear anything, see anything, feel nothing, and you are not entirely sure of who you are.")
+        }
+      </script>
+    </turnscript>
+    <command>
+      <pattern>smell</pattern>
+      <script>
+        msg ("You can smell something. Something leafy.")
+        DisableTurnScript (gardenDarkness)
+        MoveObject (Ford the cat, Greenhouse)
+      </script>
+    </command>
+  </object>
+  <verb>
+    <property>climbdown</property>
+    <pattern>climb down</pattern>
+    <defaultexpression>"You can't climb down " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>togreenhouse</property>
+    <pattern>togreenhouse</pattern>
+    <defaultexpression>"You can't togreenhouse " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="toDogPuzzle">
+    <inherit name="editor_room" />
+    <descprefix type="string"></descprefix>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <alias>Yard</alias>
+    <description type="script"><![CDATA[
+      msg ("There is grass beneath your toes, and a wooden roof over your head. The urge to grab a chew toy and a bone assails your every thought. Oh what you wouldn’t give to have a belly rub right now!<br/> You find that the fur on the back of your neck is particularly itchy. Without thinking, you scratch your itch with your hind leg, hearing a jingling around your neck. You realize it’s a collar. Your collar. And are those dog tags?  ")
+    ]]></description>
+    <beforeenter type="script">
+    </beforeenter>
+    <object name="chew toy">
+      <inherit name="editor_object" />
+      <scenery type="boolean">false</scenery>
+      <takemsg>You savour the rubbery goodness of the chew toy as you pick it up.</takemsg>
+      <visible type="boolean">false</visible>
+      <look>It's your favorite chew of all time.  It's shaped like a cute little alien and makes a squeaking noise when you chew on it.</look>
+      <dropmsg>You drop it.</dropmsg>
+      <usestandardverblist />
+      <chew>You are having so much fun! What a great day this is turning out to be!</chew>
+      <take type="script">
+        msg ("As you pick it up, you savour the rubbery goodness of the chew toy.")
+        AddToInventory (chew toy)
+      </take>
+      <grab type="script"><![CDATA[
+        msg ("As you pick it up, you savour the rubbery goodness of the chew toy.<br/>")
+        AddToInventory (chew toy)
+      ]]></grab>
+      <drop type="script">
+        msg ("You drop it.")
+        MoveObjectHere (chew toy)
+      </drop>
+      <ontake type="script">
+        AddToInventory (chew toy)
+      </ontake>
+      <ondrop type="script">
+      </ondrop>
+    </object>
+    <command>
+      <pattern>run</pattern>
+      <script><![CDATA[
+        if (Got(chew toy)) {
+          msg ("You can’t get running if you have a chew toy in your mouth. It'll slow you down and you might swallow it.")
+        }
+        else {
+          msg ("As you near the back of the truck, you see something dangling out the back end. It looks mechanical. Might be worth catching for further investigation. And chewing of course. Plastic is always fun to chew.<br/>")
+        }
+      ]]></script>
+    </command>
+    <command>
+      <pattern>dig</pattern>
+      <script>
+        firsttime {
+          msg ("You start to dig, and dig and dig.  This is the most fun you've ever had in your entire life.  But hold on what's this?!  You find your chew toy buried under the dirt!  Could this day get any more excting?")
+          MakeObjectVisible (chew toy)
+        }
+        otherwise {
+          msg ("You don’t feel much like digging anymore. Your master is home, and if he were to catch you, it would probably eliminate your chance of getting a belly rub today.")
+        }
+      </script>
+    </command>
+    <exit alias="east" to="Street">
+      <inherit name="eastdirection" />
+      <runscript />
+      <locked type="boolean">false</locked>
+      <script type="script">
+        if (not Got(chew toy)) {
+          msg ("Without your chew toy?! You can’t leave it behind!")
+        }
+        else {
+          MoveObject (Ford the cat, Street)
+        }
+      </script>
+    </exit>
+    <command>
+      <pattern>look around</pattern>
+      <script>
+        msg ("You see you're in a doghouse.  And outside is the glorious yard, ridden with dugged up holes and grass to roll around in.  Best of all there's a chew toy to gnaw on until your owner buys you a brand new one.  But wait where is that toy?  It was around here earlier.  ")
+      </script>
+    </command>
+    <object name="bone">
+      <inherit name="editor_object" />
+      <chew>You sit down and start gnawing on the bone.  Time passes…Well, that seems to be enough chewing for now! </chew>
+      <take type="script">
+        msg ("You go for the bone and realize that this is the bone that you were supposed to bury today. But you already buried so many things yesterday. The bone remains untouched.")
+      </take>
+    </object>
+  </object>
+  <verb>
+    <property>swat</property>
+    <pattern>swat</pattern>
+    <defaultexpression>"You can't swat " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <pattern>drop</pattern>
+    <property>drop</property>
+    <defaulttext>"You can't pick up object " + object.article + "."</defaulttext>
+    <defaultexpression>"You have nothing to drop " </defaultexpression>
+  </verb>
+  <object name="thirdDark">
+    <inherit name="editor_room" />
+    <alias>Darkness</alias>
+    <usedefaultprefix type="boolean">false</usedefaultprefix>
+    <turnscript>
+      <enabled />
+      <script>
+        msg ("You can’t see, smell, hear or taste anything.")
+        SetObjectFlagOn (Ford the cat, "inDogHouse")
+      </script>
+    </turnscript>
+  </object>
+  <verb>
+    <property>givethemouse</property>
+    <pattern>give the mouse to ford; give mouse to ford; </pattern>
+    <defaultexpression>"You can't give the mouse " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>assemble</property>
+    <pattern>assemble; assemble parts; assemble computer; assemble computer parts</pattern>
+    <defaultexpression>"You can't assemble parts " + object.article + "."</defaultexpression>
+  </verb>
+  <command name="feel1">
+    <pattern type="string">feel</pattern>
+    <script>
+      if (GetBoolean(Ford the cat, "inDogHouse")) {
+        SetObjectFlagOff (Ford the cat, "inDogHouse")
+        MoveObject (Ford the cat, toDogPuzzle)
+      }
+    </script>
+  </command>
+  <verb>
+    <property>todoghouse</property>
+    <pattern>todoghouse</pattern>
+    <defaultexpression>"You can't todoghouse " + object.article + "."</defaultexpression>
+  </verb>
+  <object name="Street">
+    <inherit name="editor_room" />
+    <description>You're now on the street.  Cars drive swerve past you and keep honking their horns for some reason. Suddenly, you hear the sound of the garbage truck. Oh how you love chasing the garbage truck! Now which direction did that sound come from?  Good thing you have powerful senses to track it down.</description>
+    <exit alias="west" to="toDogPuzzle">
+      <inherit name="westdirection" />
+    </exit>
+    <command name="sniff">
+      <pattern>sniff; smell</pattern>
+      <script>
+        msg ("You take a whiff of the garbage truck.  It went east!")
+      </script>
+    </command>
+    <command name="go east">
+      <pattern>go east</pattern>
+      <script>
+        msg ("You'll have to go faster than that if you want to catch up to it.")
+      </script>
+    </command>
+    <command>
+      <pattern>run</pattern>
+      <script><![CDATA[
+        if (Got(chew toy)) {
+          msg ("You can’t get running if you have a chew toy in your mouth. It'll slow you down and you might swallow it.")
+        }
+        else {
+          msg ("As you near the back of the truck, you see something dangling out the back end. It looks mechanical. Might be worth catching for further investigation. And chewing of course. Plastic is always fun to chew.  But oh no, you're losing it!<br/><br/>")
+        }
+      ]]></script>
+    </command>
+    <command>
+      <pattern>run faster</pattern>
+      <script><![CDATA[
+        msg ("As you pick up speed your tongue slips out of your mouth spraying saliva everywhere.You’re keeping pace with the garbage truck now. What you realize is a mouse is dangling an inch away from your nose. Not a real mouse of course. That thing that humans like to hold when they’re sitting in front of the lit up screen with all the buttons. <br/>")
+        SetObjectFlagOn (Ford the cat, "atTruck")
+      ]]></script>
+    </command>
+    <object name="mouse2">
+      <inherit name="editor_object" />
+      <look><![CDATA[It is a hard plastic mouse. It has remnants of the smell from the garbage truck ingrained in its surface. <br/>]]></look>
+      <feature_usegive />
+      <take />
+      <scenery />
+      <takemsg>Yes! You’ve got it! You stop running, your tongue lolling out from your mouth as you pant from the heat of the chase. </takemsg>
+      <visible />
+      <alias>mouse</alias>
+      <bite type="script">
+        if (GetBoolean(Ford the cat, "atTruck")) {
+          msg ("Yes! You’ve got it! You stop running, your tongue lolling out from your mouth as you pant from the heat of the chase.  Then just as you are basking in your triumph from catching the computer mouse, your feline friend Ford comes around the corner. ")
+          AddToInventory (mouse2)
+        }
+      </bite>
+      <chew type="script"><![CDATA[
+        if (GetBoolean(Ford the cat, "atTruck")) {
+          msg ("There’s not much to give. It isn’t as enjoyable as you were hoping it would be. Nothing like your rubber bone, or a good leather shoe. It was still fun to catch though. <br/><br/>As you are basking in your triumph from catching the computer mouse, your feline friend Ford comes around the corner. ")
+        }
+      ]]></chew>
+      <givethemouse type="script"><![CDATA[
+        msg ("After reasoning that you don’t really need a mouse anyway, you give it to Ford. The feeling of triumph after catching it is enough for you. The thrill of the chase as they say. <br/><br/>Ford doesn’t seem all that grateful considering the generous gift you just gave him. He bounds off with the mouse hanging from his mouth. Maybe one of these days he’ll be a bit friendlier. That’s a lot to ask for from a cat though. <br/><br/>Dark.<br/><br/>You are back on the vogon ship, with the “mouse” that Dog gave you. It’s surprising how useful he has been to you lately, being a dog after all. <br/>")
+        RemoveObject (mouse2)
+        MoveObject (Ford the cat, Machine Room North)
+      ]]></givethemouse>
+      <givetoanything type="script"><![CDATA[
+        msg ("After reasoning that you don’t really need a mouse anyway, you give it to Ford. The feeling of triumph after catching it is enough for you. The thrill of the chase as they say. <br/><br/>Ford doesn’t seem all that grateful considering the generous gift you just gave him. He bounds off with the mouse hanging from his mouth. Maybe one of these days he’ll be a bit friendlier. That’s a lot to ask for from a cat though. <br/><br/>Dark.<br/><br/>You are back on the vogon ship, with the “mouse” that Dog gave you. It’s surprising how useful he has been to you lately, being a dog after all. ")
+        MoveObject (Ford the cat, Machine Room North)
+      ]]></givetoanything>
+      <ontake type="script">
+        AddToInventory (mouse2)
+        msg ("Then just as you are basking in your triumph from catching the computer mouse, your feline friend Ford comes around the corner. ")
+      </ontake>
+      <giveto type="scriptdictionary" />
+      <givesingle type="script"><![CDATA[
+        msg ("After reasoning that you don’t really need a mouse anyway, you give it to Ford. The feeling of triumph after catching it is enough for you. The thrill of the chase as they say. <br/><br/>Ford doesn’t seem all that grateful considering the generous gift you just gave him. He bounds off with the mouse hanging from his mouth. Maybe one of these days he’ll be a bit friendlier. That’s a lot to ask for from a cat though. <br/><br/>Dark.<br/><br/>You are back on the vogon ship, with the “mouse” that Dog gave you. It’s surprising how useful he has been to you lately, being a dog after all. ")
+        MoveObject (Ford the cat, Machine Room North)
+      ]]></givesingle>
+      <grab type="script">
+        if (GetBoolean(Ford the cat, "atTruck")) {
+          msg ("Yes! You’ve got it! You stop running, your tongue lolling out from your mouth as you pant from the heat of the chase.  Then just as you are basking in your triumph from catching the computer mouse, your feline friend Ford comes around the corner. ")
+          AddToInventory (mouse2)
+        }
+      </grab>
+    </object>
+    <command>
+      <pattern>listen</pattern>
+      <script><![CDATA[
+        msg ("Yep. That is definitely the garbage truck. Its strong and delicious smell wafts towards you from the east.<br/>")
+      ]]></script>
+    </command>
+    <object name="Ford1">
+      <inherit name="editor_object" />
+      <giveto type="string"></giveto>
+      <scenery />
+      <attr name="go to" type="script">
+        msg ("Carrying the mouse in your mouth, you go over to Ford to show him your latest prize. He doesn’t seem all that impressed in your ability to catch the mouse, but seems interested in the mouse none the less.  \"Will you let me have it?\" He purrs.")
+      </attr>
+      <speak type="script">
+        msg ("You should probably get closer to him first.")
+      </speak>
+    </object>
+  </object>
+  <verb>
+    <property>toending</property>
+    <pattern>toending</pattern>
+    <defaultexpression>"You can't toending " + object.article + "."</defaultexpression>
+  </verb>
+  <verb>
+    <property>scratch,claw</property>
+    <pattern>scratch, claw</pattern>
+    <defaultexpression>"You can't scratch, claw " + object.article + "."</defaultexpression>
+  </verb>
+  <function name="DogisHungry">
+    if (GetBoolean(Dog, "hungry")) {
+      msg ("Dog says \"I'm not going to just give you that device without you giving me something in return. Go find me that cheese sandwich.\"")
+    }
+    else {
+      msg ("Dog says \"Thanks again for the food. Now you better figure out that device. I sense something coming.\"")
+    }
+  </function>
+  <function name="MeetingDog">
+    if (not Got(Device)) {
+      if (GetBoolean(Dog, "isClawed")) {
+        msg ("Dog promptly sits on the object and says \"You want it? You can't have it. Unless, that is, you give me something in return. You know that pub over there. They make the most fantastic cheese sandwiches. Get me one, and I'll give you the device no problem. You might have to go around the northern end of the pub to get in though.\"")
+      }
+      else {
+        msg ("Dog mumbles something. You can't understand anything he says while he has the gleaming object in his mouth")
+      }
+    }
+    else {
+      msg ("Dog says \"Thanks again for the food. Whoa look up there!\"")
+    }
+  </function>
+  <function name="Catnip">
+    if (Got(catnip)) {
+      msg ("You feel woozy. ")
+    }
+  </function>
+  <function name="Death">
+    set (Ford the cat, "Lives", Ford the cat.Lives - 1)
+    if (Ford the cat.Lives = 0) {
+      msg ("You are dead. So much for cats having nine lives. I guess you needed more than that.")
+      finish
+    }
+  </function>
+</asl>
